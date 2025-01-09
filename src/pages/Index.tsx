@@ -2,6 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Upload, Folder, Clock, Star } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const documents = [
   { id: 1, name: "Project Proposal.pdf", type: "PDF", size: "2.5 MB", modified: "2024-02-20" },
@@ -11,6 +16,26 @@ const documents = [
 ];
 
 const Index = () => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { toast } = useToast();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = () => {
+    if (selectedFile) {
+      // Here you would typically handle the file upload to a server
+      toast({
+        title: "File uploaded successfully",
+        description: `${selectedFile.name} has been uploaded.`,
+      });
+      setSelectedFile(null);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <header className="flex justify-between items-center">
@@ -18,10 +43,42 @@ const Index = () => {
           <h1 className="text-4xl font-bold text-primary">Documents</h1>
           <p className="text-secondary-foreground">Manage and organize your files</p>
         </div>
-        <Button className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Upload Document
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="flex items-center gap-2">
+              <Upload className="h-5 w-5" />
+              Upload Document
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Upload Document</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="file">Select File</Label>
+                <Input
+                  id="file"
+                  type="file"
+                  onChange={handleFileChange}
+                  className="cursor-pointer"
+                />
+              </div>
+              {selectedFile && (
+                <div className="text-sm text-muted-foreground">
+                  Selected file: {selectedFile.name}
+                </div>
+              )}
+              <Button
+                onClick={handleUpload}
+                disabled={!selectedFile}
+                className="w-full"
+              >
+                Upload
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
