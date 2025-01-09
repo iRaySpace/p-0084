@@ -1,12 +1,10 @@
-import { FileText, PieChart, Settings, User, FolderTree, Bell } from "lucide-react";
+import { FileText, PieChart, Settings, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
 const menuItems = [
   { icon: FileText, label: "Documents", path: "/" },
-  { icon: FolderTree, label: "Categories", path: "/analytics" },
-  { icon: PieChart, label: "Storage", path: "/transactions" },
-  { icon: Bell, label: "Notifications", path: "/notifications" },
+  { icon: PieChart, label: "Categories", path: "/analytics" },
   { icon: User, label: "Profile", path: "/profile" },
   { icon: Settings, label: "Settings", path: "/settings" },
 ];
